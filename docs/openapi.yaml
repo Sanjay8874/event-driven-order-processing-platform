@@ -1,0 +1,133 @@
+openapi: 3.0.3
+info:
+  title: Event-Driven Order Processing Platform API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+security:
+  - bearerAuth: []
+paths:
+  /api/v1/auth/register:
+    post:
+      security: []
+      summary: Register user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              email: customer@example.com
+              password: StrongPass123
+              fullName: Customer One
+              roles: [CUSTOMER]
+      responses:
+        '200':
+          description: JWT token pair
+        '400':
+          description: Validation or duplicate email error
+  /api/v1/auth/login:
+    post:
+      security: []
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              email: customer@example.com
+              password: StrongPass123
+      responses:
+        '200':
+          description: JWT token pair
+        '401':
+          description: Invalid credentials
+  /api/v1/orders:
+    post:
+      summary: Create order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              customerId: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+              items:
+                - inventoryId: 11111111-1111-1111-1111-111111111111
+                  quantity: 1
+                  unitPrice: 1299.00
+      responses:
+        '200':
+          description: Created order
+        '400':
+          description: Invalid payload or business rule failure
+  /api/v1/orders/{id}:
+    get:
+      summary: Get order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Order details
+        '404':
+          description: Order not found
+    patch:
+      summary: Update order state
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            example:
+              status: DELIVERED
+      responses:
+        '200':
+          description: Updated order
+  /api/v1/orders/{id}/cancel:
+    post:
+      summary: Cancel order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Cancelled order
+        '400':
+          description: Order cannot be cancelled
+  /api/v1/inventory/{id}/stock:
+    patch:
+      summary: Update stock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: quantity
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        '200':
+          description: Updated inventory item
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
