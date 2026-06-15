@@ -1,6 +1,6 @@
 # Event-Driven Order Processing Platform
 
-Enterprise-style e-commerce order processing platform built with Java 21, Spring Boot 3, PostgreSQL, JWT security, and AWS serverless design patterns. The project is designed as a GitHub and Upwork portfolio piece: runnable locally, documented thoroughly, and structured for cloud deployment.
+Enterprise-style e-commerce order processing platform built with Java 21, Spring Boot 3, PostgreSQL, JWT security, and AWS serverless design patterns. The project is designed as a GitHub: runnable locally, documented thoroughly, and structured for cloud deployment.
 
 ## Features
 
